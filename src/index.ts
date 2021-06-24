@@ -1,4 +1,5 @@
-require('dotenv').config()
+import dotenv from 'dotenv';
+dotenv.config()
 
 import TelegramBot from 'node-telegram-bot-api';
 import { scheduleJob } from 'node-schedule';
@@ -41,7 +42,8 @@ bot.on('document', (msg) => {
     })
 });
 
-bot.onText(/\*+/, (msg) => { 
+// Match any text that isn't a command, 
+bot.onText(/^(?!.*\/\w+).*/, (msg) => { 
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, 'I don\'t get it');
 });
