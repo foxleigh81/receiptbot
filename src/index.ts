@@ -6,7 +6,7 @@ import { scheduleJob } from 'node-schedule';
 import { getQuarter, getYear } from 'date-fns';
 import path from 'path'
 
-import { checkCreateDirectory, processFile } from './functions'; 
+import { checkCreateDirectory, processFile, sendResponse } from './functions'; 
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN!
 
@@ -45,5 +45,5 @@ bot.on('document', (msg) => {
 // Match any text that isn't a command, 
 bot.onText(/^(?!.*\/\w+).*/, (msg) => { 
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'I don\'t get it');
+    return sendResponse(bot, chatId, 'failure', `Sorry, we can only process file uploads.`)
 });

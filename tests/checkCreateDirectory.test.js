@@ -1,7 +1,7 @@
 import tap from 'tap'
 import fs from 'fs'
 
-import checkCreateDirectory from '../src/functions/checkCreateDirectory'
+import checkCreateDirectory from '../build/functions/checkCreateDirectory'
 
 tap.test('Test "checkCreateDirectory()"', t => {
 

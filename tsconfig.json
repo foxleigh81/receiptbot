@@ -11,6 +11,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "rootDir": "./src",
-    "outDir": "./build"
-  }
+    "outDir": "./build",
+  },
+  "exclude": [
+    "node_modules",
+    "downloads",
+    "coverage",
+    "tests",
+    "build"
+  ]
 }
