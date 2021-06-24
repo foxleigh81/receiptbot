@@ -28,10 +28,10 @@
     "typescript": "^4.3.4"
   },
   "scripts": {
-    "start": "node -r esm .",
+    "start": "node .",
     "build": "rimraf 'build' && tsc",
-    "dev": "concurrently \"tsc --watch\" \"nodemon -r esm .\"",
+    "dev": "concurrently \"tsc --watch\" \"nodemon .\"",
     "test": "yarn build && nyc --reporter=lcov tap",
-    "genreg": "node -r esm generate-registries.js"
+    "genreg": "node build/generate-registries.js"
   }
 }
