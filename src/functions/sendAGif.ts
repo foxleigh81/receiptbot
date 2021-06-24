@@ -1,5 +1,5 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
 
 export default (type: string) => {
     const fileList = fs.readdirSync(path.resolve(__dirname, `../../gifs/${type}`))
