@@ -1,14 +1,12 @@
-FROM yarnpkg/dev
+FROM ubuntu:groovy
 
-ARG telegram_bot_token
-
-ENV telegram_bot_token $telegram_bot_token
+RUN apt-get update -y && apt-get install -y nodejs npm
 
 COPY . /bot
 
 WORKDIR /bot
 
-COPY . /bot
+RUN npm install -g yarn
 
 RUN yarn install
 
