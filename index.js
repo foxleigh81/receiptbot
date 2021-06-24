@@ -1,6 +1,7 @@
 require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
+const path = require('path');
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN
 
@@ -13,16 +14,6 @@ bot.onText(/\/start/, (msg) => {
     bot.sendMessage(chatId, 'Hey, Welcome to the receiptbot');
 });
 
-bot.onText(/\/add (.+)/, (msg, match) => {
-  
-    const chatId = msg.chat.id;
-    const resp = match[1]; // the captured "whatever"
-    console.log(msg)
-    // send back the matched "whatever" to the chat
-    bot.sendMessage(chatId, `Added ${resp} file`);
-});
-
-
 const renameFile = (oldName, newName) => {
     const matcher = /downloads\/(file_\d).\w+/
     const match = oldName.match(matcher)[1]
@@ -30,34 +21,6 @@ const renameFile = (oldName, newName) => {
         ? oldName.replace(match, newName)
         : oldName
 }
-
-// bot.on('message', (msg) => {
-//     const chatId = msg.chat.id;
-
-//     if (msg.photo.length > 0) {
-//         // Photo received
-//         const lastPhoto = msg.photo.slice(-1)[0]
-//         bot.downloadFile(lastPhoto.file_id, './downloads')
-//         .then((path) => {
-//             const newName = msg.caption || null
-//             fs.rename(
-//                 path,
-//                 renameFile(path, newName),
-//                 () => {
-//                     console.log('file renamed')
-//                 }
-//             )
-//         })
-//     }
-
-//     if (msg.document && msg.document.file_name !== '') {
-//         // Other file received
-//         console.log(msg.document)
-//     }
-   
-//     // send a message to the chat acknowledging receipt of their message
-//     bot.sendMessage(chatId, 'Received your message');
-//   });
 
 bot.on('photo', (msg) => {
     const chatId = msg.chat.id;
@@ -90,4 +53,15 @@ bot.on('document', (msg) => {
             }
         )
     })
+});
+
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const fileList = fs.readdirSync(`${__dirname}/gifs`)
+    const gifList = fileList.filter(file => path.extname(file).toLowerCase() === '.gif')
+            
+    const response = gifList[Math.floor(Math.random() * gifList.length)] 
+
+    bot.sendDocument(chatId, `${__dirname}/gifs/${response}`)
+     .then(() => bot.sendMessage(chatId, "This bot only accepts files, not text")) 
 });

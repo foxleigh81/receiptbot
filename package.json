@@ -6,6 +6,7 @@
   "author": "Alex Foxleigh <alex@alexfoxleigh.com>",
   "license": "MIT",
   "dependencies": {
+    "date-fns": "^2.22.1",
     "dotenv": "^10.0.0",
     "node-telegram-bot-api": "^0.53.0",
     "nodemon": "^2.0.7",
