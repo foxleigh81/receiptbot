@@ -1,15 +1,17 @@
 require('dotenv').config()
+
 import TelegramBot from 'node-telegram-bot-api';
 import { scheduleJob } from 'node-schedule';
 import { getQuarter, getYear } from 'date-fns';
+import path from 'path'
 
 import { checkCreateDirectory, processFile } from './functions'; 
 
-const botToken = process.env.TELEGRAM_BOT_TOKEN
+const botToken = process.env.TELEGRAM_BOT_TOKEN!
 
 const bot = new TelegramBot(botToken, {polling: true});
 const today = new Date()
-const downloadPath = `${__dirname}/downloads/${getYear(today)}/Q${getQuarter(today)}`
+const downloadPath = path.resolve(__dirname, `../downloads/${getYear(today)}/Q${getQuarter(today)}`)
 
 // Run below function when script starts and once per day at midnight
 checkCreateDirectory(downloadPath)
@@ -22,9 +24,9 @@ bot.onText(/\/start/, (msg) => {
 
 bot.on('photo', (msg) => {
     const chatId = msg.chat.id;
-    const lastPhoto = msg.photo.slice(-1)[0]
+    const lastPhoto = msg.photo?.slice(-1)[0]
     const newName = msg.caption || null
-    bot.downloadFile(lastPhoto.file_id, downloadPath)
+    lastPhoto && bot.downloadFile(lastPhoto.file_id, downloadPath)
     .then((path) => {
         processFile(bot, chatId, path, newName)
     })
@@ -32,9 +34,14 @@ bot.on('photo', (msg) => {
 
 bot.on('document', (msg) => {
     const chatId = msg.chat.id;
-    const newName = msg.caption || msg.document.file_name
-    bot.downloadFile(msg.document.file_id, downloadPath)
+    const newName = msg.caption || msg.document?.file_name
+    msg.document && bot.downloadFile(msg.document.file_id, downloadPath)
     .then((path) => {
         processFile(bot, chatId, path, newName)
     })
+});
+
+bot.onText(/\*+/, (msg) => { 
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'I don\'t get it');
 });

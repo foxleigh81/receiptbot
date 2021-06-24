@@ -27,9 +27,9 @@ e.g. with registering
 */
 `;
 
-const generateLines = (directory) =>
+const generateLines = (directory: string) =>
   readdirSync(resolve(directory))
-    .map((file) => {
+    .map((file: string) => {
       const include = '.js';
       // Only look for requested files and ignore indexes
       if (!file.match(include))
@@ -40,7 +40,7 @@ const generateLines = (directory) =>
       const varName = camelCase(fileNoExt);
       return `export { default as ${varName} } from './${fileNoExt}'`;
     })
-    .filter((item) => item)
+    .filter((item: any) => item)
     .toString()
     .replace(/,/g, '\n');
 
