@@ -14,4 +14,6 @@ RUN yarn install
 
 RUN yarn build
 
-CMD [ "yarn start" ]
+CMD yarn start
+
+# TODO: token is not being applied for some reason
